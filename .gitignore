@@ -1,0 +1,20 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+# TypeScript build artifacts
+*.tsbuildinfo
+lib/**/*.js
+lib/**/*.js.map
+lib/**/*.d.ts
+# Lefthook
+.lefthook-local/

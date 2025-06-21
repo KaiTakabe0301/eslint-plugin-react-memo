@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "repomix": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "repomix", "--mcp"],
+      "env": {}
+    },
+    "eslint": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "eslint", "--mcp"],
+      "env": {}
+    }
+  }
+}

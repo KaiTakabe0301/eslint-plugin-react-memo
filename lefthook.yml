@@ -1,0 +1,28 @@
+# Lefthook configuration
+# https://lefthook.dev/configuration/
+
+pre-push:
+  parallel: false
+  commands:
+    lint:
+      run: pnpm lint
+      tags:
+        - lint
+        - code-quality
+
+    test:
+      run: pnpm test
+      tags:
+        - test
+
+    format-check:
+      run: pnpm format:check
+      tags:
+        - format
+        - code-quality
+
+    typecheck:
+      run: pnpm tsc --noEmit
+      tags:
+        - typescript
+        - type-check
