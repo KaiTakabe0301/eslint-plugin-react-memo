@@ -3,11 +3,20 @@ tests/
 __tests__/
 *.test.js
 *.spec.js
+*.test.ts
+*.spec.ts
+vitest.config.ts
 
 # Development files
 .eslintrc.js
 eslint.config.js
 .gitignore
+tsconfig.json
+tsconfig.test.json
+tsup.config.ts
+lefthook.yml
+.prettierignore
+.prettierrc.json
 
 # Documentation source
 docs/
@@ -31,3 +40,13 @@ Thumbs.db
 *.tmp
 *.swp
 *.swo
+
+# Source files
+src/
+
+# Git hooks
+.lefthook-local/
+
+# MCP config
+.mcp.json
+.claude/
