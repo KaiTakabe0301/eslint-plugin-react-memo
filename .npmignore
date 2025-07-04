@@ -50,3 +50,6 @@ src/
 # MCP config
 .mcp.json
 .claude/
+
+# GitHub files
+.github/
