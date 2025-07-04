@@ -1,6 +1,6 @@
 {
   "name": "@kaitakabe0301/eslint-plugin-react-memo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ESLint plugin to enforce useCallback usage in React custom hooks",
   "keywords": [
     "eslint",
