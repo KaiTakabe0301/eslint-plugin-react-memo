@@ -4,6 +4,7 @@ export const configs = {
     plugins: ['@kaitakabe0301/react-memo'],
     rules: {
       '@kaitakabe0301/react-memo/require-usecallback': 'error',
+      '@kaitakabe0301/react-memo/require-usememo': 'error',
     },
   },
 };

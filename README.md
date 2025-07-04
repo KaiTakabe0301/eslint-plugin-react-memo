@@ -1,10 +1,10 @@
 # @kaitakabe0301/eslint-plugin-react-memo
 
-React のカスタムフックとコンポーネント内で作成される関数に `useCallback` の使用を強制する ESLint プラグインです。
+React のカスタムフックとコンポーネント内で作成される関数に `useCallback` の使用を強制し、関数呼び出しやオブジェクト型の値に `useMemo` の使用を強制する ESLint プラグインです。
 
 ## 概要
 
-このプラグインは、React アプリケーションのパフォーマンスを最適化するために設計されています。カスタムフックやコンポーネント内で新しく作成される関数は、再レンダリング時に異なる参照を持つため、不要な再レンダリングや副作用の再実行を引き起こす可能性があります。このプラグインは、そのような関数を `useCallback` でラップすることを強制します。
+このプラグインは、React アプリケーションのパフォーマンスを最適化するために設計されています。カスタムフックやコンポーネント内で新しく作成される関数や値は、再レンダリング時に異なる参照を持つため、不要な再レンダリングや副作用の再実行を引き起こす可能性があります。このプラグインは、関数を `useCallback` で、関数呼び出しやオブジェクト型の値を `useMemo` でラップすることを強制します。
 
 ## インストール
 
@@ -39,6 +39,7 @@ export default [
     },
     rules: {
       '@kaitakabe0301/react-memo/require-usecallback': 'error',
+      '@kaitakabe0301/react-memo/require-usememo': 'error',
     },
   },
 ];
@@ -64,7 +65,8 @@ export default [
 {
   "plugins": ["@kaitakabe0301/react-memo"],
   "rules": {
-    "@kaitakabe0301/react-memo/require-use-callback-in-hooks": "error"
+    "@kaitakabe0301/react-memo/require-use-callback-in-hooks": "error",
+    "@kaitakabe0301/react-memo/require-use-memo": "error"
   }
 }
 ```
@@ -144,12 +146,66 @@ const Modal = ({ onClose }) => {
 };
 ```
 
+### require-use-memo / require-usememo
+
+カスタムフックと React コンポーネント内で関数呼び出しやオブジェクト型の値（オブジェクト、配列、JSX要素）を `useMemo` でラップすることを強制します。
+
+このルールは以下の2つのパターンを検出します：
+
+1. 関数呼び出し - 再計算コストや参照の安定性が必要な場合
+2. オブジェクト型の値 - 毎回新しい参照が作成されるのを防ぐ
+
+**❌ 間違った例：**
+
+```javascript
+// カスタムフック
+function useCustomHook(value) {
+  const result = calculateSomething(value);
+  const config = { theme: 'dark', size: 'large' };
+  const items = [1, 2, 3];
+  return { result, config, items };
+}
+
+// React コンポーネント
+function MyComponent({ data }) {
+  const processed = processData(data);
+  const styles = { padding: '10px', border: '1px solid #ccc' };
+  const element = <div>Hello</div>;
+  return <div style={styles}>{element}</div>;
+}
+```
+
+**✅ 正しい例：**
+
+```javascript
+import { useMemo } from 'react';
+
+// カスタムフック
+function useCustomHook(value) {
+  const result = useMemo(() => calculateSomething(value), [value]);
+  const config = useMemo(() => ({ theme: 'dark', size: 'large' }), []);
+  const items = useMemo(() => [1, 2, 3], []);
+  return { result, config, items };
+}
+
+// React コンポーネント
+function MyComponent({ data }) {
+  const processed = useMemo(() => processData(data), [data]);
+  const styles = useMemo(
+    () => ({ padding: '10px', border: '1px solid #ccc' }),
+    []
+  );
+  const element = useMemo(() => <div>Hello</div>, []);
+  return <div style={styles}>{element}</div>;
+}
+```
+
 ## Auto-fix
 
-このルールは自動修正機能を提供します。ESLint は自動的に：
+両方のルールは自動修正機能を提供します。ESLint は自動的に：
 
-1. 関数を `useCallback` でラップします
-2. 必要に応じて React から `useCallback` をインポートします
+1. 関数を `useCallback` で、値を `useMemo` でラップします
+2. 必要に応じて React から `useCallback` や `useMemo` をインポートします
 3. 空の依存配列 `[]` を初期値として設定します
 
 ```sh
