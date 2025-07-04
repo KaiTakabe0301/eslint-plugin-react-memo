@@ -1,6 +1,6 @@
 {
   "name": "@kaitakabe0301/eslint-plugin-react-memo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ESLint plugin to enforce useCallback usage in React custom hooks",
   "keywords": [
     "eslint",
@@ -36,9 +36,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "npm run clean && npm run build && npm run lint && npm run format",
-    "prepublishOnly": "npm run build",
-    "postinstall": "lefthook install"
+    "prepare": "lefthook install",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.0",
