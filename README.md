@@ -1,30 +1,32 @@
 # @kaitakabe0301/eslint-plugin-react-memo
 
-React のカスタムフックとコンポーネント内で作成される関数に `useCallback` の使用を強制し、関数呼び出しやオブジェクト型の値に `useMemo` の使用を強制する ESLint プラグインです。
+[日本語版 README](./README.ja.md)
 
-## 概要
+An ESLint plugin that enforces the use of `useCallback` for functions created in React custom hooks and components, and `useMemo` for function calls and object-type values.
 
-このプラグインは、React アプリケーションのパフォーマンスを最適化するために設計されています。カスタムフックやコンポーネント内で新しく作成される関数や値は、再レンダリング時に異なる参照を持つため、不要な再レンダリングや副作用の再実行を引き起こす可能性があります。このプラグインは、関数を `useCallback` で、関数呼び出しやオブジェクト型の値を `useMemo` でラップすることを強制します。
+## Overview
 
-## インストール
+This plugin is designed to optimize the performance of React applications. Functions and values newly created within custom hooks or components will have different references on re-renders, potentially causing unnecessary re-renders or re-execution of side effects. This plugin enforces wrapping functions with `useCallback` and function calls or object-type values with `useMemo`.
 
-まず、[ESLint](https://eslint.org/) をインストールする必要があります：
+## Installation
+
+First, you need to install [ESLint](https://eslint.org/):
 
 ```sh
 npm install eslint --save-dev
-# または
+# or
 pnpm add -D eslint
 ```
 
-次に、`@kaitakabe0301/eslint-plugin-react-memo` をインストールします：
+Next, install `@kaitakabe0301/eslint-plugin-react-memo`:
 
 ```sh
 npm install @kaitakabe0301/eslint-plugin-react-memo --save-dev
-# または
+# or
 pnpm add -D @kaitakabe0301/eslint-plugin-react-memo
 ```
 
-## 使用方法
+## Usage
 
 ### ESLint v9+ (Flat Config)
 
@@ -45,7 +47,7 @@ export default [
 ];
 ```
 
-推奨設定を使用する場合：
+Using the recommended configuration:
 
 ```javascript
 // eslint.config.js
@@ -59,7 +61,7 @@ export default [
 
 ### ESLint v8 (Legacy Config)
 
-`.eslintrc` に対して、以下のように `@kaitakabe0301/react-memo` を追加します：
+Add `@kaitakabe0301/react-memo` to your `.eslintrc` as follows:
 
 ```json
 {
@@ -71,18 +73,18 @@ export default [
 }
 ```
 
-## ルール
+## Rules
 
 ### require-use-callback-in-hooks / require-usecallback
 
-カスタムフックと React コンポーネント内で新しく作成される関数を `useCallback` でラップすることを強制します。
+Enforces wrapping functions newly created in custom hooks and React components with `useCallback`.
 
-このルールは、カスタムフックやコンポーネント内で作成された関数が、レンダリング間で参照の等価性を保持することを保証し、不要な再レンダリングを防ぎます。
+This rule ensures that functions created within custom hooks or components maintain referential equality between renders, preventing unnecessary re-renders.
 
-**❌ 間違った例：**
+**❌ Bad:**
 
 ```javascript
-// カスタムフック
+// Custom hook
 function useCustomHook() {
   const handler = () => {
     console.log('clicked');
@@ -90,7 +92,7 @@ function useCustomHook() {
   return handler;
 }
 
-// React コンポーネント
+// React component
 function Button({ onClick }) {
   const handleClick = () => {
     console.log('Button clicked');
@@ -99,7 +101,7 @@ function Button({ onClick }) {
   return <button onClick={handleClick}>Click me</button>;
 }
 
-// アロー関数コンポーネント
+// Arrow function component
 const Modal = ({ onClose }) => {
   const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
@@ -110,12 +112,12 @@ const Modal = ({ onClose }) => {
 };
 ```
 
-**✅ 正しい例：**
+**✅ Good:**
 
 ```javascript
 import { useCallback } from 'react';
 
-// カスタムフック
+// Custom hook
 function useCustomHook() {
   const handler = useCallback(() => {
     console.log('clicked');
@@ -123,7 +125,7 @@ function useCustomHook() {
   return handler;
 }
 
-// React コンポーネント
+// React component
 function Button({ onClick }) {
   const handleClick = useCallback(() => {
     console.log('Button clicked');
@@ -132,7 +134,7 @@ function Button({ onClick }) {
   return <button onClick={handleClick}>Click me</button>;
 }
 
-// アロー関数コンポーネント
+// Arrow function component
 const Modal = ({ onClose }) => {
   const handleBackdropClick = useCallback(
     e => {
@@ -148,17 +150,17 @@ const Modal = ({ onClose }) => {
 
 ### require-use-memo / require-usememo
 
-カスタムフックと React コンポーネント内で関数呼び出しやオブジェクト型の値（オブジェクト、配列、JSX要素）を `useMemo` でラップすることを強制します。
+Enforces wrapping function calls and object-type values (objects, arrays, JSX elements) with `useMemo` in custom hooks and React components.
 
-このルールは以下の2つのパターンを検出します：
+This rule detects two patterns:
 
-1. 関数呼び出し - 再計算コストや参照の安定性が必要な場合
-2. オブジェクト型の値 - 毎回新しい参照が作成されるのを防ぐ
+1. Function calls - when computation cost or reference stability is needed
+2. Object-type values - to prevent creating new references on every render
 
-**❌ 間違った例：**
+**❌ Bad:**
 
 ```javascript
-// カスタムフック
+// Custom hook
 function useCustomHook(value) {
   const result = calculateSomething(value);
   const config = { theme: 'dark', size: 'large' };
@@ -166,7 +168,7 @@ function useCustomHook(value) {
   return { result, config, items };
 }
 
-// React コンポーネント
+// React component
 function MyComponent({ data }) {
   const processed = processData(data);
   const styles = { padding: '10px', border: '1px solid #ccc' };
@@ -175,12 +177,12 @@ function MyComponent({ data }) {
 }
 ```
 
-**✅ 正しい例：**
+**✅ Good:**
 
 ```javascript
 import { useMemo } from 'react';
 
-// カスタムフック
+// Custom hook
 function useCustomHook(value) {
   const result = useMemo(() => calculateSomething(value), [value]);
   const config = useMemo(() => ({ theme: 'dark', size: 'large' }), []);
@@ -188,7 +190,7 @@ function useCustomHook(value) {
   return { result, config, items };
 }
 
-// React コンポーネント
+// React component
 function MyComponent({ data }) {
   const processed = useMemo(() => processData(data), [data]);
   const styles = useMemo(
@@ -202,88 +204,88 @@ function MyComponent({ data }) {
 
 ## Auto-fix
 
-両方のルールは自動修正機能を提供します。ESLint は自動的に：
+Both rules provide auto-fix functionality. ESLint will automatically:
 
-1. 関数を `useCallback` で、値を `useMemo` でラップします
-2. 必要に応じて React から `useCallback` や `useMemo` をインポートします
-3. 空の依存配列 `[]` を初期値として設定します
+1. Wrap functions with `useCallback` and values with `useMemo`
+2. Import `useCallback` or `useMemo` from React if needed
+3. Set an empty dependency array `[]` as the initial value
 
 ```sh
-# 自動修正を実行
+# Run auto-fix
 eslint --fix .
 ```
 
-## このルールを使用すべき場合
+## When to Use These Rules
 
-このルールは以下のような場合に特に有用です：
+These rules are particularly useful when:
 
-1. パフォーマンスが重要なアプリケーションを構築している場合
-2. カスタムフックが依存関係として使用される関数を返す場合
-3. 一貫したメモ化パターンを強制したい場合
-4. チームで作業しており、コード品質を維持したい場合
-5. メモ化された子コンポーネントに関数を props として渡すコンポーネントがある場合
-6. コンポーネントツリー全体で不要な再レンダリングを防ぎたい場合
+1. You're building performance-critical applications
+2. Your custom hooks return functions that are used as dependencies
+3. You want to enforce consistent memoization patterns
+4. You're working in a team and want to maintain code quality
+5. You have components that pass functions as props to memoized child components
+6. You want to prevent unnecessary re-renders throughout your component tree
 
-## 開発
+## Development
 
-### セットアップ
+### Setup
 
 ```sh
-# 依存関係のインストール
+# Install dependencies
 pnpm install
 
-# 開発時のビルド
+# Build for development
 pnpm build
 ```
 
-### スクリプト
+### Scripts
 
 ```sh
-# TypeScript のコンパイル
+# Compile TypeScript
 pnpm build
 
-# テストの実行
+# Run tests
 pnpm test
 
-# テストをウォッチモードで実行
+# Run tests in watch mode
 pnpm test:watch
 
-# リントの実行
+# Run linting
 pnpm lint
 
-# フォーマットの実行
+# Run formatting
 pnpm format
 
-# 型チェック
+# Type check
 pnpm tsc --noEmit
 ```
 
-### プロジェクト構造
+### Project Structure
 
 ```
 src/
 ├── rules/
 │   ├── require-usecallback/
-│   │   ├── index.ts        # ルールの実装
-│   │   └── type.ts         # 型定義
-│   └── index.ts            # ルールのエクスポート
-├── flat-config.ts          # ESLint v9 flat config サポート
-└── index.ts                # メインエントリーポイント
+│   │   ├── index.ts        # Rule implementation
+│   │   └── type.ts         # Type definitions
+│   └── index.ts            # Rules export
+├── flat-config.ts          # ESLint v9 flat config support
+└── index.ts                # Main entry point
 ```
 
-## 貢献
+## Contributing
 
-バグレポートや機能リクエストは、GitHub の Issue でお知らせください。プルリクエストも歓迎します！
+Bug reports and feature requests are welcome on GitHub Issues. Pull requests are also welcome!
 
-### 開発フロー
+### Development Flow
 
-1. このリポジトリをフォーク
-2. 機能ブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork this repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-## ライセンス
+## License
 
 Copyright (c) 2025 Kai Takabe (KaiTakabe0301)
 This software is released under the MIT License, see LICENSE.
