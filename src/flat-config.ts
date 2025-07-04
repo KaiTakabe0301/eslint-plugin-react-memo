@@ -8,6 +8,7 @@ export const flatConfig: ESLint.Plugin = {
   },
   rules: {
     'require-usecallback': rules['require-usecallback'],
+    'require-usememo': rules['require-usememo'],
   },
 };
 
@@ -17,6 +18,7 @@ Object.defineProperty(flatConfig, 'configs', {
       plugins: ['@kaiTakabe0301/react-memo'],
       rules: {
         '@kaiTakabe0301/react-memo/require-usecallback': 'error',
+        '@kaiTakabe0301/react-memo/require-usememo': 'error',
       },
     },
   },
