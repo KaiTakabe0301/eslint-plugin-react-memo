@@ -1,10 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-    'rules/index': 'src/rules/index.ts',
-  },
+  entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
   dts: true,
   sourcemap: true,
@@ -12,7 +9,7 @@ export default defineConfig({
   minify: false,
   splitting: false,
   outDir: 'dist',
-  target: 'es2018',
+  target: 'es2020',
   external: ['eslint'],
   noExternal: [],
   esbuildOptions(options) {
