@@ -1,6 +1,6 @@
 # @kaitakabe0301/eslint-plugin-react-memo
 
-[English README](./README.md)
+[English README](https://github.com/KaiTakabe0301/eslint-plugin-react-memo/blob/main/README.md)
 
 React のカスタムフックとコンポーネント内で作成される関数に `useCallback` の使用を強制し、関数呼び出しやオブジェクト型の値に `useMemo` の使用を強制する ESLint プラグインです。
 

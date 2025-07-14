@@ -1,6 +1,6 @@
 # @kaitakabe0301/eslint-plugin-react-memo
 
-[日本語版 README](./README.ja.md)
+[日本語版 README](https://github.com/KaiTakabe0301/eslint-plugin-react-memo/blob/main/README.ja.md)
 
 An ESLint plugin that enforces the use of `useCallback` for functions created in React custom hooks and components, and `useMemo` for function calls and object-type values.
 
